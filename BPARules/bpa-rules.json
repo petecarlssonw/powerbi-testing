@@ -28,7 +28,7 @@
       "Description": "For best performance, it is recommended to avoid using bi-directional relationships against high-cardinality columns. In order to run this rule, you must first run the script shown here: https://www.elegantbi.com/post/vertipaqintabulareditor",
       "Severity": 2,
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
-      "Expression": "UsedInRelationships.Any(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections)\n\nand\n\nConvert.ToInt64(GetAnnotation(\"Vertipaq_Cardinality\")) > 100000",
+      "Expression": "UsedInRelationships.Any(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections)\nand\nConvert.ToInt64(GetAnnotation(\"Vertipaq_Cardinality\")) > 100000",
       "CompatibilityLevel": 1200
     },
     {
