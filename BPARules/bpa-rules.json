@@ -98,7 +98,7 @@
       "Description": "This rule looks for tables that contain the words 'date' or 'calendar' as they should likely be marked as a date table.\r\nReference: https://docs.microsoft.com/en-us/power-bi/transform-model/desktop-date-tables",
       "Severity": 2,
       "Scope": "Table, CalculatedTable",
-      "Expression": "(Name.ToUpper().Contains(\"DATE\") or Name.ToUpper().Contains(\"CALENDAR\"))\n\nand\n\n(\nDataCategory <> \"Time\"\n\nor\n\nColumns.Any(IsKey == true && DataType == \"DateTime\") == false\n)",
+      "Expression": "(Name.ToUpper().Contains(\"DATE\") or Name.ToUpper().Contains(\"CALENDAR\"))\n\nand\n(\nDataCategory <> \"Time\"\n\nor\n\nColumns.Any(IsKey == true && DataType == \"DateTime\") == false\n)",
       "CompatibilityLevel": 1200
     },
     {
@@ -108,7 +108,7 @@
       "Description": "Avoid using auto-date tables. Make sure to turn off auto-date table in the settings in Power BI Desktop. This will save memory resources. \r\nReference: https://www.youtube.com/watch?v=xu3uDEHtCrg",
       "Severity": 3,
       "Scope": "Table, CalculatedTable",
-      "Expression": "ObjectTypeName == \"Calculated Table\"\n\r\nand\r\n\n(\nName.StartsWith(\"DateTableTemplate_\") \n\nor \n\nName.StartsWith(\"LocalDateTable_\")\n)",
+      "Expression": "ObjectTypeName == \"Calculated Table\"\n\r\nand\r\n(\nName.StartsWith(\"DateTableTemplate_\") \n\nor \n\nName.StartsWith(\"LocalDateTable_\")\n)",
       "CompatibilityLevel": 1200
     },
     {
@@ -118,7 +118,7 @@
       "Description": "Limit use of b-di and many-to-many relationships. This rule flags the model if more than 30% of relationships are bi-di or many-to-many.\r\nReference: https://www.sqlbi.com/articles/bidirectional-relationships-and-ambiguity-in-dax/",
       "Severity": 2,
       "Scope": "Model",
-      "Expression": "(\r\n\nRelationships.Where(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections).Count()\r\n\n+\r\n\nRelationships.Where(FromCardinality.ToString() == \"Many\" && ToCardinality.ToString() == \"Many\").Count()\r\n\n)\r\n\n\n/\r\n\n\nMath.Max(Convert.ToDecimal(Relationships.Count)\n\n,1)> 0.2",
+      "Expression": "(\r\n\nRelationships.Where(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections).Count()\r\n+\r\n\nRelationships.Where(FromCardinality.ToString() == \"Many\" && ToCardinality.ToString() == \"Many\").Count()\r\n)\r\n\n/\r\n\nMath.Max(Convert.ToDecimal(Relationships.Count)\n,1)> 0.2",
       "CompatibilityLevel": 1200
     },
     {
@@ -128,7 +128,7 @@
       "Description": "Limit use of b-di and many-to-many relationships. This rule flags the model if more than 30% of relationships are bi-di or many-to-many.\r\nReference: https://www.sqlbi.com/articles/bidirectional-relationships-and-ambiguity-in-dax/",
       "Severity": 3,
       "Scope": "Model",
-      "Expression": "(\r\n\nRelationships.Where(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections).Count()\r\n\n+\r\n\nRelationships.Where(FromCardinality.ToString() == \"Many\" && ToCardinality.ToString() == \"Many\").Count()\r\n\n)\r\n\n\n/\r\n\n\nMath.Max(Convert.ToDecimal(Relationships.Count)\n\n,1)> 0.4",
+      "Expression": "(\r\n\nRelationships.Where(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections).Count()\r\n+\r\n\nRelationships.Where(FromCardinality.ToString() == \"Many\" && ToCardinality.ToString() == \"Many\").Count()\r\n)\r\n\n/\r\n\nMath.Max(Convert.ToDecimal(Relationships.Count)\n,1)> 0.4",
       "CompatibilityLevel": 1200
     },
     {
@@ -148,7 +148,7 @@
       "Description": "If using Direct Query in Power BI Premium, you may want to consider using aggregations in order to boost performance.\r\nReference: https://docs.microsoft.com/en-us/power-bi/transform-model/desktop-aggregations",
       "Severity": 2,
       "Scope": "Model",
-      "Expression": "Tables.Any(ObjectTypeName == \"Table (DirectQuery)\")\r\nand\r\n\n\nAllColumns.Any(AlternateOf != null) == false\r\nand \r\nDefaultPowerBIDataSourceVersion.ToString() == \"PowerBI_V3\"",
+      "Expression": "Tables.Any(ObjectTypeName == \"Table (DirectQuery)\")\r\nand\r\n\nAllColumns.Any(AlternateOf != null) == false\r\nand \r\nDefaultPowerBIDataSourceVersion.ToString() == \"PowerBI_V3\"",
       "CompatibilityLevel": 1200
     },
     {
@@ -415,7 +415,7 @@
       "Description": "Hidden columns that are not referenced by any DAX expressions, relationships, hierarchy levels or Sort By-properties should be removed.",
       "Severity": 2,
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
-      "Expression": "(IsHidden or Table.IsHidden)\n\n\r\nand ReferencedBy.Count = 0\r\n\n\nand (not UsedInRelationships.Any())\n\n\r\nand (not UsedInSortBy.Any())\n\n\r\nand (not UsedInHierarchies.Any())\n\n\r\nand (not Table.RowLevelSecurity.Any(\nit <> null and it.IndexOf(\"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n))\n\n and (not Model.Roles.Any(RowLevelSecurity.Any(\nit <> null and \n(\nit.IndexOf(current.Table.Name + \"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0 or\n it.IndexOf(\"'\" + current.Table.Name + \"'[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n )\n)))",
+      "Expression": "(IsHidden or Table.IsHidden)\n\r\nand ReferencedBy.Count = 0\r\n\nand (not UsedInRelationships.Any())\n\r\nand (not UsedInSortBy.Any())\n\r\nand (not UsedInHierarchies.Any())\n\r\nand (not Table.RowLevelSecurity.Any(\nit <> null and it.IndexOf(\"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n))\n and (not Model.Roles.Any(RowLevelSecurity.Any(\nit <> null and \n(\nit.IndexOf(current.Table.Name + \"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0 or\n it.IndexOf(\"'\" + current.Table.Name + \"'[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n )\n)))",
       "FixExpression": "Delete()",
       "CompatibilityLevel": 1200
     },
@@ -531,7 +531,7 @@
       "Description": "Flags must be properly formatted as Yes/No as this is easier to read than using 0/1 integer values.",
       "Severity": 1,
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
-      "Expression": "(\nName.StartsWith(\"Is\") and \nDataType = \"Int64\" and \nnot (IsHidden or Table.IsHidden)\n) \r\nor\r\n\n(\nName.EndsWith(\" Flag\") and \nDataType <> \"String\" and \nnot (IsHidden or Table.IsHidden)\n)",
+      "Expression": "(\nName.StartsWith(\"Is\") and \nDataType = \"Int64\" and \nnot (IsHidden or Table.IsHidden)\n) \r\nor\r\n(\nName.EndsWith(\" Flag\") and \nDataType <> \"String\" and \nnot (IsHidden or Table.IsHidden)\n)",
       "CompatibilityLevel": 1200
     },
     {
@@ -686,7 +686,7 @@
       "Description": "This rule highlights month columns which are strings and are not sorted. If left unsorted, they will sort alphabetically (i.e. April, August...). Make sure to sort such columns so that they sort properly (January, February, March...).",
       "Severity": 2,
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
-      "Expression": "Name.ToUpper().Contains(\"MONTH\")\r\nand\r\n! Name.ToUpper().Contains(\"MONTHS\") \r\nand \r\n\n\nDataType == DataType.String \r\nand \r\nSortByColumn == null",
+      "Expression": "Name.ToUpper().Contains(\"MONTH\")\r\nand\r\n! Name.ToUpper().Contains(\"MONTHS\") \r\nand \r\n\nDataType == DataType.String \r\nand \r\nSortByColumn == null",
       "CompatibilityLevel": 1200
     },
     {
