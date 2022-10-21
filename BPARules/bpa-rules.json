@@ -415,7 +415,7 @@
       "Description": "Hidden columns that are not referenced by any DAX expressions, relationships, hierarchy levels or Sort By-properties should be removed.",
       "Severity": 2,
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
-      "Expression": "(IsHidden or Table.IsHidden)\nand ReferencedBy.Count = 0\r\nand (not UsedInRelationships.Any())\nand (not UsedInSortBy.Any())\nand (not UsedInHierarchies.Any())\nand (not Table.RowLevelSecurity.Any(\nit <> null and it.IndexOf(\"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n))\n and (not Model.Roles.Any(RowLevelSecurity.Any(\nit <> null and \n(\nit.IndexOf(current.Table.Name + \"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0 or\n it.IndexOf(\"'\" + current.Table.Name + \"'[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n )\n)))",
+      "Expression": "(IsHidden or Table.IsHidden)\r\nand ReferencedBy.Count = 0\r\nand (not UsedInRelationships.Any())\r\nand (not UsedInSortBy.Any())\r\nand (not UsedInHierarchies.Any())\r\nand (not Table.RowLevelSecurity.Any(\nit <> null and it.IndexOf(\"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n))\n and (not Model.Roles.Any(RowLevelSecurity.Any(\nit <> null and \n(\nit.IndexOf(current.Table.Name + \"[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0 or\n it.IndexOf(\"'\" + current.Table.Name + \"'[\" + current.Name + \"]\", \"OrdinalIgnoreCase\") >= 0\n )\n)))",
       "FixExpression": "Delete()",
       "CompatibilityLevel": 1200
     },
