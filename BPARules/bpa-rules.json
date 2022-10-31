@@ -713,7 +713,7 @@
       "ID": "SSUD_DATASOURCE_CHECK",
       "Name": "[Governance] Legacy Data Lake is being replaced by Snowflake (EDP)",
       "Category": "Governance",
-      "Description": "Data Lake is actively being replaced with the Enterprise Data Platform (Snowflake). Please review any SSUD sources and determine if there is a Snowflake equivalent available.",
+      "Description": "Data Lake is actively being replaced with the Enterprise Data Platform (Snowflake). Please review any SSUD sources and determine if there is a Snowflake equivalent available. https://woodside.alationcloud.com/article/81/how-do-i-connect-power-bi-to-the-enterprise-data-platform",
       "Severity": 2,
       "Scope": "Partition",
       "Expression": "SourceType.ToString() = \"M\"\r\nand\r\nQuery.Contains(\"SSUD.Contents\")",
