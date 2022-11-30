@@ -8,7 +8,9 @@
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
       "Expression": "DataType = \"Double\"",
       "FixExpression": "DataType = DataType.Decimal",
-      "CompatibilityLevel": 1200
+      "CompatibilityLevel": 1200,
+      "Resolution":"While editing your report in Power BI Desktop select the field to update, under the \"Column tools\" ribbon tab set the Data type to \"Fixed decimal number\" and set the Format to \"Decimal Number\".",
+      "Link":"https://woodside.alationcloud.com/article/220/"
     },
     {
       "ID": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
