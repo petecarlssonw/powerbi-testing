@@ -564,7 +564,7 @@
       "Description": "Visible measures that are not TEXT data types should have their format property assigned",
       "Severity": 3,
       "Scope": "Measure",
-      "Expression": "not IsHidden \r\nand not Table.IsHidden \r\nand string.IsNullOrWhitespace(FormatString)\r\nand not (DataType = \"String\")",
+      "Expression": "not IsHidden \r\nand not Table.IsHidden \r\nand string.IsNullOrWhitespace(FormatString)\r\nand not (DataType = \"String\" or DataType = \"Boolean\")",
       "CompatibilityLevel": 1200
     },
     {
