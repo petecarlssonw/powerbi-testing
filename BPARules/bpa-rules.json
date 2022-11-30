@@ -109,7 +109,9 @@
       "Severity": 3,
       "Scope": "Table, CalculatedTable",
       "Expression": "ObjectTypeName == \"Calculated Table\"\nand\r\n(\nName.StartsWith(\"DateTableTemplate_\") \nor \nName.StartsWith(\"LocalDateTable_\")\n)",
-      "CompatibilityLevel": 1200
+      "CompatibilityLevel": 1200,
+      "Resolution":"this is some resolution text",
+      "Link":"https://willow.woodside/news"
     },
     {
       "ID": "AVOID_EXCESSIVE_BI-DIRECTIONAL_OR_MANY-TO-MANY_RELATIONSHIPS > 0.2",
