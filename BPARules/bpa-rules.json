@@ -21,7 +21,7 @@
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
       "Expression": "IsAvailableInMDX\r\nand\r\n(IsHidden or Table.IsHidden)\r\nand\r\nnot UsedInSortBy.Any() \r\nand\r\nnot UsedInHierarchies.Any()\r\nand\r\nnot UsedInVariations.Any()",
       "FixExpression": "IsAvailableInMDX = false",
-      "CompatibilityLevel": 1200
+      "CompatibilityLevel": 1200 
     },
     {
       "ID": "AVOID_BI-DIRECTIONAL_RELATIONSHIPS_AGAINST_HIGH-CARDINALITY_COLUMNS",
