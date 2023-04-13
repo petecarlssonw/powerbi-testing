@@ -21,7 +21,7 @@
       "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
       "Expression": "IsAvailableInMDX\r\nand\r\n(IsHidden or Table.IsHidden)\r\nand\r\nnot UsedInSortBy.Any() \r\nand\r\nnot UsedInHierarchies.Any()\r\nand\r\nnot UsedInVariations.Any()",
       "FixExpression": "IsAvailableInMDX = false",
-      "CompatibilityLevel": 1200 
+      "CompatibilityLevel": 1200
     },
     {
       "ID": "AVOID_BI-DIRECTIONAL_RELATIONSHIPS_AGAINST_HIGH-CARDINALITY_COLUMNS",
@@ -126,6 +126,16 @@
       "CompatibilityLevel": 1200
     },
     {
+      "ID": "AVOID_EXCESSIVE_BI-DIRECTIONAL_OR_MANY-TO-MANY_RELATIONSHIPS > 0.4",
+      "Name": "[Performance] Avoid excessive bi-directional or many-to-many relationships",
+      "Category": "Performance",
+      "Description": "Limit use of b-di and many-to-many relationships. This rule flags the model if more than 40% of relationships are bi-di or many-to-many.\r\nReference: https://www.sqlbi.com/articles/bidirectional-relationships-and-ambiguity-in-dax/",
+      "Severity": 3,
+      "Scope": "Model",
+      "Expression": "(\r\nRelationships.Where(CrossFilteringBehavior == CrossFilteringBehavior.BothDirections).Count()\r\n+\r\nRelationships.Where(FromCardinality.ToString() == \"Many\" && ToCardinality.ToString() == \"Many\").Count()\r\n)\r\n/\r\nMath.Max(Convert.ToDecimal(Relationships.Count)\n,1)> 0.4",
+      "CompatibilityLevel": 1200
+    },
+    {
       "ID": "LIMIT_ROW_LEVEL_SECURITY_(RLS)_LOGIC",
       "Name": "[Performance] Limit row level security (RLS) logic",
       "Category": "Performance",
@@ -204,13 +214,23 @@
       "CompatibilityLevel": 1200
     },
     {
-      "ID": "DO_NOT_USE_CALCULATED_COLUMNS",
+      "ID": "REDUCE_NUMBER_OF_CALCULATED_COLUMNS > 5",
       "Name": "[Performance] Reduce number of calculated columns",
       "Category": "Performance",
       "Description": "Calculated columns do not compress as well as data columns so they take up more memory. They also slow down processing times for both the table as well as process recalc. Offload calculated column logic to your data warehouse and turn these calculated columns into data columns.\r\nReference: https://www.elegantbi.com/post/top10bestpractices",
       "Severity": 2,
       "Scope": "Model",
-      "Expression": "AllColumns.Where(Type.ToString() == \"Calculated\").Count() > 0",
+      "Expression": "AllColumns.Where(Type.ToString() == \"Calculated\").Count() > 5",
+      "CompatibilityLevel": 1200
+    },
+    {
+      "ID": "REDUCE_NUMBER_OF_CALCULATED_COLUMNS > 10",
+      "Name": "[Performance] Reduce number of calculated columns",
+      "Category": "Performance",
+      "Description": "Calculated columns do not compress as well as data columns so they take up more memory. They also slow down processing times for both the table as well as process recalc. Offload calculated column logic to your data warehouse and turn these calculated columns into data columns.\r\nReference: https://www.elegantbi.com/post/top10bestpractices",
+      "Severity": 3,
+      "Scope": "Model",
+      "Expression": "AllColumns.Where(Type.ToString() == \"Calculated\").Count() > 10",
       "CompatibilityLevel": 1200
     },
     {
@@ -238,7 +258,7 @@
       "Name": "[DAX Expressions] Column references should be fully qualified",
       "Category": "DAX Expressions",
       "Description": "Using fully qualified column references makes it easier to distinguish between column and measure references, and also helps avoid certain errors. When referencing a column in DAX, first specify the table name, then specify the column name in square brackets.\r\nReference: https://www.elegantbi.com/post/top10bestpractices",
-      "Severity": 2,
+      "Severity": 3,
       "Scope": "Measure, KPI, TablePermission, CalculationItem",
       "Expression": "DependsOn.Any(Key.ObjectType = \"Column\" and Value.Any(not FullyQualified))",
       "CompatibilityLevel": 1200
@@ -248,7 +268,7 @@
       "Name": "[DAX Expressions] Measure references should be unqualified",
       "Category": "DAX Expressions",
       "Description": "Using unqualified measure references makes it easier to distinguish between column and measure references, and also helps avoid certain errors. When referencing a measure using DAX, do not specify the table name. Use only the measure name in square brackets.\r\nReference: https://www.elegantbi.com/post/top10bestpractices",
-      "Severity": 2,
+      "Severity": 3,
       "Scope": "Measure, CalculatedColumn, CalculatedTable, KPI, CalculationItem",
       "Expression": "DependsOn.Any(Key.ObjectType = \"Measure\" and Value.Any(FullyQualified))",
       "CompatibilityLevel": 1200
@@ -407,7 +427,7 @@
       "ID": "UNNECESSARY_MEASURES",
       "Name": "[Maintenance] Remove unnecessary measures",
       "Category": "Maintenance",
-      "Description": "Hidden measures that are not referenced by any DAX expressions should be removed for maintainability - caution that this rule is not aware of measures used only in visual level filters so manual review is required",
+      "Description": "Hidden measures that are not referenced by any DAX expressions should be removed for maintainability",
       "Severity": 2,
       "Scope": "Measure",
       "Expression": "(Table.IsHidden or IsHidden) \r\nand ReferencedBy.Count = 0",
@@ -591,6 +611,16 @@
       "CompatibilityLevel": 1200
     },
     {
+      "ID": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Name": "[Formatting] Relationship columns should be of integer data type",
+      "Category": "Formatting",
+      "Description": "It is a best practice for relationship columns to be of integer data type. This applies not only to data warehousing but data modeling as well.",
+      "Severity": 2,
+      "Scope": "DataColumn, CalculatedColumn, CalculatedTableColumn",
+      "Expression": "UsedInRelationships.Any()\nand \nDataType != DataType.Int64",
+      "CompatibilityLevel": 1200
+    },
+    {
       "ID": "ADD_DATA_CATEGORY_FOR_COLUMNS",
       "Name": "[Formatting] Add data category for columns",
       "Category": "Formatting",
@@ -677,7 +707,7 @@
       "Name": "[Governance] Legacy Data Lake is being replaced by Snowflake (EDP)",
       "Category": "Governance",
       "Description": "Data Lake is actively being replaced with the Enterprise Data Platform (Snowflake). Please review any SSUD sources and determine if there is a Snowflake equivalent available. https://woodside.alationcloud.com/article/81/how-do-i-connect-power-bi-to-the-enterprise-data-platform",
-      "Severity": 3,
+      "Severity": 2,
       "Scope": "Partition",
       "Expression": "SourceType.ToString() = \"M\"\r\nand\r\nQuery.Contains(\"SSUD.Contents\")",
       "CompatibilityLevel": 1200
