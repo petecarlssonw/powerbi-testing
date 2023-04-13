@@ -204,7 +204,7 @@
       "CompatibilityLevel": 1200
     },
     {
-      "ID": "DO_NOT_USE_CALCULATED_COLUMNS"
+      "ID": "DO_NOT_USE_CALCULATED_COLUMNS",
       "Name": "[Performance] Reduce number of calculated columns",
       "Category": "Performance",
       "Description": "Calculated columns do not compress as well as data columns so they take up more memory. They also slow down processing times for both the table as well as process recalc. Offload calculated column logic to your data warehouse and turn these calculated columns into data columns.\r\nReference: https://www.elegantbi.com/post/top10bestpractices",
